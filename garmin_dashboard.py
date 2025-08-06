@@ -8,8 +8,7 @@ from garminconnect import Garmin
 import folium
 from streamlit_folium import st_folium
 import os
-import matplotlib.dates as mdates
-import matplotlib.pyplot as plt
+import plotly.express as px
 
 
 SPORT_GROUPS = {
@@ -184,6 +183,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
