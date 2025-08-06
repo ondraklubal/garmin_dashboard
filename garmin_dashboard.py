@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from garminconnect import Garmin
 import folium
 from streamlit_folium import st_folium
+import os
 
 SPORT_GROUPS = {
     "Běh": ["running", "treadmill_running"],
@@ -49,8 +50,9 @@ def plot_activity_map(activity_detail):
     else:
         return None
 
-mail = "ondra.klubal@gmail.com"
-pwd = "&zVd#Ec%u?V0"
+
+mail = os.getenv("GARMIN_EMAIL")
+pwd = os.getenv("GARMIN_PASSWORD")
 
 @st.cache_resource(show_spinner="🔐 Přihlašuji se ke Garminu...")
 def connect_to_garmin():
@@ -165,3 +167,4 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
