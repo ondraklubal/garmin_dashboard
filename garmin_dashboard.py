@@ -140,12 +140,11 @@ df_display["Vzdálenost (km)"] = df_display["distance"] / 1000
 df_display["Tempo (min/km)"] = df_display["averageSpeed"].apply(format_tempo)
 df_display["Doba trvání"] = df_display["duration"].apply(format_duration)
 df_display["Průměrná tepová frekvence"] = df_display.get("averageHR", pd.Series([None]*len(df_display)))
-df_display["Kadence"] = df_display.get("averageCadence", pd.Series([None]*len(df_display)))
 
 st.dataframe(
     df_display[[
         "startTimeLocal", "activityName", "Vzdálenost (km)", "Doba trvání", "Tempo (min/km)",
-        "Průměrná tepová frekvence", "Kadence", "calories"
+        "Průměrná tepová frekvence", "calories"
     ]].rename(columns={
         "startTimeLocal": "Datum",
         "activityName": "Název",
@@ -176,7 +175,13 @@ fig.update_layout(
     hovermode="x unified",
     bargap=0.2,
     plot_bgcolor="rgba(0,0,0,0)",
-    height=400
+    height=400,
+    xaxis=dict(
+        tickangle=90,                    # otočení o 90 stupňů
+        tickmode='array',
+        tickvals=weekly_stats["week_str"],  # popisky pro každý týden
+        ticktext=weekly_stats["week_str"]
+    )
 )
 
 st.plotly_chart(fig, use_container_width=True)
@@ -196,6 +201,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
