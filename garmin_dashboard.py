@@ -163,7 +163,7 @@ weekly_stats["week_str"] = weekly_stats["week"].dt.strftime("%d.%m.")
 # Interaktivní graf pomocí Plotly
 fig = px.bar(
     weekly_stats,
-    x="week",
+    x="week_str",
     y="distance_km",
     labels={"week": "Týden", "distance_km": "Kilometry"},
     title="Naběhané / najeté kilometry po týdnech",
@@ -202,6 +202,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
