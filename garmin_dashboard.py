@@ -124,6 +124,10 @@ if df_filtered.empty:
     st.warning("Žádné aktivity pro vybrané období.")
     st.stop()
 
+total_days = (end_date - start_date).days + 1
+
+st.sidebar.markdown(f"**Počet dní ve filtru:** {total_days} dní")
+
 total_distance_km = df_filtered["distance"].sum() / 1000
 total_duration_h = df_filtered["duration"].sum() / 3600
 total_calories = df_filtered["calories"].sum()
@@ -202,6 +206,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
