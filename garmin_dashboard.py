@@ -130,11 +130,18 @@ total_distance_km = df_filtered["distance"].sum() / 1000
 total_duration_h = df_filtered["duration"].sum() / 3600
 total_calories = df_filtered["calories"].sum()
 
-c0, c1, c2, c3 = st.columns(4)
-c0.metric("Za posledních:", f"{total_days}", " dní")
-c1.metric("Celková vzdálenost", f"{total_distance_km:.1f} km")
-c2.metric("Celkový čas", f"{total_duration_h:.1f} h")
-c3.metric("Spálené kalorie", f"{int(total_calories):,} kcal")
+cols = st.columns(6)  # například 6 sloupců
+
+metrics = [
+    ("Za posledních", f"{total_days} dní"),
+    ("Celková vzdálenost", f"{total_distance_km:.1f} km"),
+    ("Celkový čas", f"{total_duration_h:.1f} h"),
+    ("Spálené kalorie", f"{int(total_calories):,} kcal"),
+    # přidej další metriky sem
+]
+
+for col, (label, value) in zip(cols, metrics):
+    col.metric(label, value)
 
 st.subheader("📋 Aktivity")
 df_display = df_filtered.copy()
@@ -205,6 +212,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
