@@ -126,13 +126,12 @@ if df_filtered.empty:
 
 total_days = (end_date - start_date).days + 1
 
-st.sidebar.markdown(f"**Počet dní ve filtru:** {total_days} dní")
-
 total_distance_km = df_filtered["distance"].sum() / 1000
 total_duration_h = df_filtered["duration"].sum() / 3600
 total_calories = df_filtered["calories"].sum()
 
-c1, c2, c3 = st.columns(3)
+c0, c1, c2, c3 = st.columns(4)
+c0.metric("Za posledních:", f"{total_days}", " dní")
 c1.metric("Celková vzdálenost", f"{total_distance_km:.1f} km")
 c2.metric("Celkový čas", f"{total_duration_h:.1f} h")
 c3.metric("Spálené kalorie", f"{int(total_calories):,} kcal")
@@ -206,6 +205,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
