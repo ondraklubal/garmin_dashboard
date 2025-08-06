@@ -155,18 +155,31 @@ st.dataframe(
 )
 
 st.subheader("Akvitita po týdnech")
-df_filtered["week"] = df_filtered["startTimeLocal"].dt.to_period("W").apply(lambda r: r.start_time)
+df_weekly = df_filtered.copy()
+df_weekly["week"] = df_weekly["startTimeLocal"].dt.to_period("W").apply(lambda r: r.start_time)
+weekly_stats = df_weekly.groupby("week")["distance"].sum().reset_index()
+weekly_stats["distance_km"] = weekly_stats["distance"] / 1000
 
-weekly_km = df_filtered.groupby("week")["distance"].sum() / 1000  # km
+# Interaktivní graf pomocí Plotly
+fig = px.bar(
+    weekly_stats,
+    x="week",
+    y="distance_km",
+    labels={"week": "Týden", "distance_km": "Kilometry"},
+    title="Naběhané / najeté kilometry po týdnech",
+    text_auto=".1f"
+)
 
-fig, ax = plt.subplots()
-weekly_km.plot(kind="bar", ax=ax)
-ax.set_ylabel("Kilometry")
-ax.set_xlabel("Týden")
-ax.set_title("📊 Vývoj kilometrů po týdnech")
-ax.grid(True)
-plt.xticks(rotation=45)
-st.pyplot(fig)
+fig.update_layout(
+    xaxis_title="Týden",
+    yaxis_title="Vzdálenost (km)",
+    hovermode="x unified",
+    bargap=0.2,
+    plot_bgcolor="rgba(0,0,0,0)",
+    height=400
+)
+
+st.plotly_chart(fig, use_container_width=True)
 
 st.subheader("🗺️ Mapa vybrané aktivity")
 
@@ -183,6 +196,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
