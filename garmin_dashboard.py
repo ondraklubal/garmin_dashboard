@@ -51,8 +51,8 @@ def plot_activity_map(activity_detail):
         return None
 
 
-mail = os.getenv("GARMIN_EMAIL")
-pwd = os.getenv("GARMIN_PASSWORD")
+mail = os.getenv("mail")
+pwd = os.getenv("pwd")
 
 @st.cache_resource(show_spinner="🔐 Přihlašuji se ke Garminu...")
 def connect_to_garmin():
@@ -167,4 +167,5 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
