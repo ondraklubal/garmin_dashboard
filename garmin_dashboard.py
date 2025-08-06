@@ -158,6 +158,7 @@ df_weekly = df_filtered.copy()
 df_weekly["week"] = df_weekly["startTimeLocal"].dt.to_period("W").apply(lambda r: r.start_time)
 weekly_stats = df_weekly.groupby("week")["distance"].sum().reset_index()
 weekly_stats["distance_km"] = weekly_stats["distance"] / 1000
+weekly_stats["week_str"] = weekly_stats["week"].dt.strftime("%d.%m.")
 
 # Interaktivní graf pomocí Plotly
 fig = px.bar(
@@ -201,6 +202,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
