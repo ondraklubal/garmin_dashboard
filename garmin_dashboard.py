@@ -137,11 +137,16 @@ metrics = [
     ("Celková vzdálenost", f"{total_distance_km:.1f} km"),
     ("Celkový čas", f"{total_duration_h:.1f} h"),
     ("Spálené kalorie", f"{int(total_calories):,} kcal"),
-    # přidej další metriky sem
 ]
 
+cols = st.columns(len(metrics))
 for col, (label, value) in zip(cols, metrics):
-    col.metric(label, value)
+    col.markdown(f"""
+    <div style="text-align:center; padding: 5px; font-size: 14px;">
+        <div style="font-weight:600; color: #555;">{label}</div>
+        <div style="font-size: 22px; font-weight:700; color: #111;">{value}</div>
+    </div>
+    """, unsafe_allow_html=True)
 
 st.subheader("📋 Aktivity")
 df_display = df_filtered.copy()
@@ -212,6 +217,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
