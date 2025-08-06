@@ -8,6 +8,8 @@ from garminconnect import Garmin
 import folium
 from streamlit_folium import st_folium
 import os
+import matplotlib.dates as mdates
+
 
 SPORT_GROUPS = {
     "Běh": ["running", "treadmill_running"],
@@ -152,6 +154,20 @@ st.dataframe(
     use_container_width=True
 )
 
+st.subheader("Akvitita po týdnech")
+df_filtered["week"] = df_filtered["startTimeLocal"].dt.to_period("W").apply(lambda r: r.start_time)
+
+weekly_km = df_filtered.groupby("week")["distance"].sum() / 1000  # km
+
+fig, ax = plt.subplots()
+weekly_km.plot(kind="bar", ax=ax)
+ax.set_ylabel("Kilometry")
+ax.set_xlabel("Týden")
+ax.set_title("📊 Vývoj kilometrů po týdnech")
+ax.grid(True)
+plt.xticks(rotation=45)
+st.pyplot(fig)
+
 st.subheader("🗺️ Mapa vybrané aktivity")
 
 if selected_activity_id is None:
@@ -167,5 +183,6 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
