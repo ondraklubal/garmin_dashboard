@@ -26,8 +26,6 @@ def map_sport_group(type_key):
             return group
     return "Jiné"
 
-st.write(df[df["sport"].str.contains("gravel", na=False)][["startTimeLocal", "activityName", "sport", "sport_group"]])
-
 
 def format_tempo(speed_m_s, sport_group):
     if speed_m_s <= 0:
@@ -166,6 +164,7 @@ with st.expander("🧾 Seznam všech typů aktivit v datech"):
     all_activity_types = df["sport"].unique()
     st.write(", ".join(sorted(all_activity_types)))
 
+st.write(df[df["sport"].str.contains("gravel", na=False)][["startTimeLocal", "activityName", "sport", "sport_group"]])
 
 all_known_types = set(df["sport"].unique())
 mapped_types = set(sum(SPORT_GROUPS.values(), []))  # flatten all lists in SPORT_GROUPS
@@ -173,7 +172,7 @@ unmapped = all_known_types - mapped_types
 
 if unmapped:
     st.warning(f"Nemapované typy aktivit: {', '.join(unmapped)}")
-    
+
 st.subheader("📋 Aktivity")
 df_display = df_filtered.copy()
 
@@ -242,6 +241,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
