@@ -189,6 +189,22 @@ df_display[[
     "calories": "Kalorie"
 }),
 
+st.subheader("📂 Aktivity označené jako 'other' (nezatříděné Garminem)")
+
+df_other = df[df["sport"] == "other"]
+if df_other.empty:
+    st.info("Nenalezeny žádné aktivity s typem 'other'.")
+else:
+    st.dataframe(df_other[[
+        "startTimeLocal", "activityName", "distance", "duration", "sport"
+    ]].rename(columns={
+        "startTimeLocal": "Datum",
+        "activityName": "Název",
+        "distance": "Vzdálenost (m)",
+        "duration": "Doba trvání (s)",
+        "sport": "Typ aktivity"
+    }), use_container_width=True)
+
 st.subheader("Akvitita po týdnech")
 df_weekly = df_filtered.copy()
 df_weekly["week"] = df_weekly["startTimeLocal"].dt.to_period("W").apply(lambda r: r.start_time)
@@ -238,6 +254,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
