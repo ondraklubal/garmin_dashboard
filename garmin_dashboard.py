@@ -174,7 +174,7 @@ df_display[[
     "startTimeLocal": "Datum",
     "activityName": "Název",
     "calories": "Kalorie"
-})
+}),
 
 st.subheader("Akvitita po týdnech")
 df_weekly = df_filtered.copy()
@@ -225,6 +225,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
