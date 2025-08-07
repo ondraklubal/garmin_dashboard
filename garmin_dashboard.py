@@ -159,6 +159,10 @@ for col, (label, value) in zip(cols, metrics):
     </div>
     """, unsafe_allow_html=True)
 
+with st.expander("🧾 Seznam všech typů aktivit v datech"):
+    all_activity_types = df["sport"].unique()
+    st.write(", ".join(sorted(all_activity_types)))
+    
 st.subheader("📋 Aktivity")
 df_display = df_filtered.copy()
 
@@ -226,6 +230,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
