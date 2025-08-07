@@ -13,7 +13,7 @@ import plotly.express as px
 
 SPORT_GROUPS = {
     "Běh": ["running", "treadmill_running"],
-    "Cyklistika": ["cycling", "indoor_cycling", "gravel_cycling", "road_cycling"],
+    "Cyklistika": ["cycling", "indoor_cycling", "gravel_cycling", "road_cycling", "lap_cycling"],
     "Plavání": ["swimming", "pool_swimming", "open_water_swimming", "lap_swimming"],
     "Silový trénink": ["strength_training", "weight_training"],
     "Běžky": ["cross_country_skiing", "nordic_skiing"],
@@ -166,9 +166,10 @@ df_display["Vzdálenost (km)"] = df_display["distance"] / 1000
 df_display["Tempo"] = df_display["averageSpeed"].apply(lambda s: format_tempo(s, selected_sport))
 df_display["Doba trvání"] = df_display["duration"].apply(format_duration)
 df_display["Průměrná tepová frekvence"] = df_display.get("averageHR", pd.Series([None]*len(df_display)))
+df_display["Typ aktivity"] = df_display["sport"]
 
 df_display[[
-    "startTimeLocal", "activityName", "Vzdálenost (km)", "Doba trvání", "Tempo",
+    "startTimeLocal", "activityName", "Typ aktivity","Vzdálenost (km)", "Doba trvání", "Tempo",
     "Průměrná tepová frekvence", "calories"
 ]].rename(columns={
     "startTimeLocal": "Datum",
@@ -225,6 +226,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
