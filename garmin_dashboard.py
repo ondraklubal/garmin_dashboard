@@ -100,9 +100,11 @@ st.title("📊 Garmin dashboard")
 
 col1, col2, col3 = st.columns([1, 2, 3])
 
+# available_sports = sorted(df["sport_group"].unique(), key=lambda x: (x == "Jiné", x))
+# selected_sport = st.selectbox("Vyber sport", available_sports)
 with col1:
-    available_sports = sorted(df["sport_group"].unique(), key=lambda x: (x == "Jiné", x))
-    selected_sport = st.selectbox("Vyber sport", available_sports)
+    available_types = sorted(df["sport"].unique())
+    selected_type = st.selectbox("Vyber typ aktivity", available_types)
 
 with col2:
     min_date = df["startTimeLocal"].min().date()
@@ -112,7 +114,7 @@ with col2:
 
 # Filtrování dat podle výběru
 df_filtered = df[
-    (df["sport_group"] == selected_sport) &
+    (df["sport_group"] == selected_type) &
     (df["startTimeLocal"].dt.date >= start_date) &
     (df["startTimeLocal"].dt.date <= end_date)
 ]
@@ -229,6 +231,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
