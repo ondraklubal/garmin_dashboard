@@ -160,18 +160,6 @@ for col, (label, value) in zip(cols, metrics):
     </div>
     """, unsafe_allow_html=True)
 
-with st.expander("🧾 Seznam všech typů aktivit v datech"):
-    all_activity_types = df["sport"].unique()
-    st.write(", ".join(sorted(all_activity_types)))
-
-st.write(df[df["sport"].str.contains("gravel", na=False)][["startTimeLocal", "activityName", "sport", "sport_group"]])
-
-all_known_types = set(df["sport"].unique())
-mapped_types = set(sum(SPORT_GROUPS.values(), []))  # flatten all lists in SPORT_GROUPS
-unmapped = all_known_types - mapped_types
-
-if unmapped:
-    st.warning(f"Nemapované typy aktivit: {', '.join(unmapped)}")
 
 st.subheader("📋 Aktivity")
 df_display = df_filtered.copy()
@@ -183,7 +171,7 @@ df_display["Průměrná tepová frekvence"] = df_display.get("averageHR", pd.Ser
 df_display["Typ aktivity"] = df_display["sport"]
 
 df_display[[
-    "startTimeLocal", "activityName", "Typ aktivity","Vzdálenost (km)", "Doba trvání", "Tempo",
+    "startTimeLocal", "activityName", "Typ aktivity", "Vzdálenost (km)", "Doba trvání", "Tempo",
     "Průměrná tepová frekvence", "calories"
 ]].rename(columns={
     "startTimeLocal": "Datum",
@@ -241,6 +229,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
