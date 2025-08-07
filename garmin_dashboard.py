@@ -13,7 +13,7 @@ import plotly.express as px
 
 SPORT_GROUPS = {
     "Běh": ["running", "treadmill_running"],
-    "Cyklistika": ["cycling", "indoor_cycling"],
+    "Cyklistika": ["cycling", "indoor_cycling", "gravel_cycling", "road_cycling"],
     "Plavání": ["swimming", "pool_swimming", "open_water_swimming", "lap_swimming"],
     "Silový trénink": ["strength_training", "weight_training"],
     "Běžky": ["cross_country_skiing", "nordic_skiing"],
@@ -26,13 +26,24 @@ def map_sport_group(type_key):
             return group
     return "Jiné"
 
-def format_tempo(speed_m_s):
+def format_tempo(speed_m_s, sport_group):
     if speed_m_s <= 0:
         return "-"
-    pace_min_per_km = 1000 / speed_m_s / 60
-    minutes = int(pace_min_per_km)
-    seconds = int((pace_min_per_km - minutes) * 60)
-    return f"{minutes}:{seconds:02d} min/km"
+    if sport_group == "Plavání":
+        pace_sec_per_100m = 100 / speed_m_s
+        minutes = int(pace_sec_per_100m // 60)
+        seconds = int(pace_sec_per_100m % 60)
+        return f"{minutes}:{seconds:02d} min/100m"
+    elif sport_group == "Běh":
+        pace_min_per_km = 1000 / speed_m_s / 60
+        minutes = int(pace_min_per_km)
+        seconds = int((pace_min_per_km - minutes) * 60)
+        return f"{minutes}:{seconds:02d} min/km"
+    elif sport_group in ["Cyklistika", "Turistika/Chůze"]:
+        km_per_h = speed_m_s * 3.6
+        return f"{km_per_h:.1f} km/h"
+    else:
+        return f"{speed_m_s:.2f} m/s"
 
 def format_duration(seconds):
     return str(timedelta(seconds=int(seconds)))
@@ -89,7 +100,7 @@ st.title("📊 Garmin dashboard")
 col1, col2, col3 = st.columns([1, 2, 3])
 
 with col1:
-    available_sports = sorted(df["sport_group"].unique())
+    available_sports = sorted(df["sport_group"].unique(), key=lambda x: (x == "Jiné", x))
     selected_sport = st.selectbox("Vyber sport", available_sports)
 
 with col2:
@@ -152,21 +163,18 @@ st.subheader("📋 Aktivity")
 df_display = df_filtered.copy()
 
 df_display["Vzdálenost (km)"] = df_display["distance"] / 1000
-df_display["Tempo (min/km)"] = df_display["averageSpeed"].apply(format_tempo)
+df_display["Tempo"] = df_display["averageSpeed"].apply(lambda s: format_tempo(s, selected_sport))
 df_display["Doba trvání"] = df_display["duration"].apply(format_duration)
 df_display["Průměrná tepová frekvence"] = df_display.get("averageHR", pd.Series([None]*len(df_display)))
 
-st.dataframe(
-    df_display[[
-        "startTimeLocal", "activityName", "Vzdálenost (km)", "Doba trvání", "Tempo (min/km)",
-        "Průměrná tepová frekvence", "calories"
-    ]].rename(columns={
-        "startTimeLocal": "Datum",
-        "activityName": "Název",
-        "calories": "Kalorie"
-    }),
-    use_container_width=True
-)
+df_display[[
+    "startTimeLocal", "activityName", "Vzdálenost (km)", "Doba trvání", "Tempo",
+    "Průměrná tepová frekvence", "calories"
+]].rename(columns={
+    "startTimeLocal": "Datum",
+    "activityName": "Název",
+    "calories": "Kalorie"
+})
 
 st.subheader("Akvitita po týdnech")
 df_weekly = df_filtered.copy()
@@ -217,6 +225,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
