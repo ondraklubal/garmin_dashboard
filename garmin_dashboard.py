@@ -13,7 +13,7 @@ import plotly.express as px
 
 SPORT_GROUPS = {
     "Běh": ["running", "treadmill_running"],
-    "Cyklistika": ["Cycling", "indoor_cycling", "gravel_cycling", "road_cycling", "lap_cycling"],
+    "Cyklistika": ["cycling", "indoor_cycling", "gravel_cycling", "road_cycling", "lap_cycling"],
     "Plavání": ["swimming", "pool_swimming", "open_water_swimming", "lap_swimming"],
     "Silový trénink": ["strength_training", "weight_training"],
     "Běžky": ["cross_country_skiing", "nordic_skiing"],
@@ -162,6 +162,14 @@ for col, (label, value) in zip(cols, metrics):
 with st.expander("🧾 Seznam všech typů aktivit v datech"):
     all_activity_types = df["sport"].unique()
     st.write(", ".join(sorted(all_activity_types)))
+
+
+all_known_types = set(df["sport"].unique())
+mapped_types = set(sum(SPORT_GROUPS.values(), []))  # flatten all lists in SPORT_GROUPS
+unmapped = all_known_types - mapped_types
+
+if unmapped:
+    st.warning(f"Nemapované typy aktivit: {', '.join(unmapped)}")
     
 st.subheader("📋 Aktivity")
 df_display = df_filtered.copy()
@@ -230,6 +238,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
