@@ -13,7 +13,7 @@ import plotly.express as px
 
 SPORT_GROUPS = {
     "Běh": ["running", "treadmill_running"],
-    "Cyklistika": ["cycling", "indoor_cycling", "gravel_cycling", "road_cycling", "lap_cycling"],
+    "Cyklistika": ["Cycling", "indoor_cycling", "gravel_cycling", "road_cycling", "lap_cycling"],
     "Plavání": ["swimming", "pool_swimming", "open_water_swimming", "lap_swimming"],
     "Silový trénink": ["strength_training", "weight_training"],
     "Běžky": ["cross_country_skiing", "nordic_skiing"],
@@ -230,6 +230,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
