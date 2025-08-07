@@ -88,8 +88,8 @@ def load_all_activities():
     df["startTimeLocal"] = pd.to_datetime(df["startTimeLocal"])
     df["distance"] = df["distance"].astype(float)
     df["duration"] = df["duration"].astype(float)
-    df["sport"] = df["sport"].str.strip().str.lower()
     df["sport"] = df["activityType"].apply(lambda x: x["typeKey"])
+    df["sport"] = df["sport"].str.strip().str.lower()
     df["sport_group"] = df["sport"].apply(map_sport_group)
 
     return df
@@ -231,6 +231,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
