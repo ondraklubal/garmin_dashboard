@@ -121,15 +121,17 @@ df_filtered = df[
 
 # Výběr aktivity pro mapu
 with col3:
-    activity_options = df_filtered.apply(
-        lambda row: f"{row['startTimeLocal'].strftime('%Y-%m-%d %H:%M')} – {row['activityName']}", axis=1
-    ).tolist()
-    if activity_options:
+    if df_filtered.empty:
+        st.warning("Žádná aktivita k zobrazení.")
+        selected_activity_id = None
+    else:
+        activity_options = df_filtered.apply(
+            lambda row: f"{row['startTimeLocal'].strftime('%Y-%m-%d %H:%M')} – {row['activityName']}", axis=1
+        ).tolist()
+
         selected_activity_str = st.selectbox("Vyber aktivitu pro mapu", activity_options)
         selected_index = activity_options.index(selected_activity_str)
         selected_activity_id = df_filtered.iloc[selected_index]["activityId"]
-    else:
-        selected_activity_id = None
 
 # --- Výsledky pod filtry, roztáhnuté na celou šířku
 st.markdown("---")
@@ -231,6 +233,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
