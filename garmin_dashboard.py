@@ -134,39 +134,6 @@ with col3:
         selected_activity_id = df_filtered.iloc[selected_index]["activityId"]
 
 
-st.markdown("#### 📆 Rychlý výběr období")
-
-if "start_date" not in st.session_state:
-    st.session_state["start_date"] = df["startTimeLocal"].min().date()
-if "end_date" not in st.session_state:
-    st.session_state["end_date"] = df["startTimeLocal"].max().date()
-
-start_date = st.date_input("Od:", value=st.session_state["start_date"])
-end_date = st.date_input("Do:", value=st.session_state["end_date"])
-
-# Ulož zpět do session_state pro další použití
-st.session_state["start_date"] = start_date
-st.session_state["end_date"] = end_date
-
-col1, col2, col3, col4 = st.columns(4)
-
-# Funkce pro přenastavení období
-def set_date_range(days):
-    st.session_state["start_date"] = st.session_state["end_date"] - timedelta(days=days)
-
-with col1:
-    if st.button("30 dní"):
-        set_date_range(30)
-with col2:
-    if st.button("90 dní"):
-        set_date_range(90)
-with col3:
-    if st.button("6 měsíců"):
-        set_date_range(182)
-with col4:
-    if st.button("1 rok"):
-        set_date_range(365)
-
 # --- Výsledky pod filtry, roztáhnuté na celou šířku
 st.markdown("---")
 
@@ -267,6 +234,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
