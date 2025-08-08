@@ -133,6 +133,23 @@ with col3:
         selected_index = activity_options.index(selected_activity_str)
         selected_activity_id = df_filtered.iloc[selected_index]["activityId"]
 
+
+st.markdown("#### 📆 Rychlý výběr období")
+
+col_short1, col_short2, col_short3, col_short4 = st.columns(4)
+with col_short1:
+    if st.button("🗓️ Posledních 30 dní"):
+        start_date = end_date - timedelta(days=30)
+with col_short2:
+    if st.button("📅 Posledních 90 dní"):
+        start_date = end_date - timedelta(days=90)
+with col_short3:
+    if st.button("🗓️ Posledních 6 měsíců"):
+        start_date = end_date - timedelta(days=182)
+with col_short4:
+    if st.button("📆 Poslední rok"):
+        start_date = end_date - timedelta(days=365)
+
 # --- Výsledky pod filtry, roztáhnuté na celou šířku
 st.markdown("---")
 
@@ -233,6 +250,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
