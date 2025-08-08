@@ -136,6 +136,18 @@ with col3:
 
 st.markdown("#### 📆 Rychlý výběr období")
 
+if "start_date" not in st.session_state:
+    st.session_state["start_date"] = df["startTimeLocal"].min().date()
+if "end_date" not in st.session_state:
+    st.session_state["end_date"] = df["startTimeLocal"].max().date()
+
+start_date = st.date_input("Od:", value=st.session_state["start_date"])
+end_date = st.date_input("Do:", value=st.session_state["end_date"])
+
+# Ulož zpět do session_state pro další použití
+st.session_state["start_date"] = start_date
+st.session_state["end_date"] = end_date
+
 col1, col2, col3, col4 = st.columns(4)
 
 # Funkce pro přenastavení období
@@ -255,6 +267,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
