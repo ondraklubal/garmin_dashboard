@@ -43,7 +43,7 @@ spusťte lokálně přes terminál:
 streamlit run app.py
 
 
-# 📊 Garmin Dashboard
+--- EN ---
 
 This Streamlit application visualizes your Garmin Connect sports activities. It helps you monitor your performance over time, view detailed stats by sport type, and display route maps for individual activities.
 
