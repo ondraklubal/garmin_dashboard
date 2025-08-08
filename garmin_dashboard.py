@@ -136,19 +136,24 @@ with col3:
 
 st.markdown("#### 📆 Rychlý výběr období")
 
-col_short1, col_short2, col_short3, col_short4 = st.columns(4)
-with col_short1:
-    if st.button("🗓️ Posledních 30 dní"):
-        start_date = end_date - timedelta(days=30)
-with col_short2:
-    if st.button("📅 Posledních 90 dní"):
-        start_date = end_date - timedelta(days=90)
-with col_short3:
-    if st.button("🗓️ Posledních 6 měsíců"):
-        start_date = end_date - timedelta(days=182)
-with col_short4:
-    if st.button("📆 Poslední rok"):
-        start_date = end_date - timedelta(days=365)
+col1, col2, col3, col4 = st.columns(4)
+
+# Funkce pro přenastavení období
+def set_date_range(days):
+    st.session_state["start_date"] = st.session_state["end_date"] - timedelta(days=days)
+
+with col1:
+    if st.button("30 dní"):
+        set_date_range(30)
+with col2:
+    if st.button("90 dní"):
+        set_date_range(90)
+with col3:
+    if st.button("6 měsíců"):
+        set_date_range(182)
+with col4:
+    if st.button("1 rok"):
+        set_date_range(365)
 
 # --- Výsledky pod filtry, roztáhnuté na celou šířku
 st.markdown("---")
@@ -250,6 +255,7 @@ else:
             st.info("Vybraná aktivita nemá GPS data vhodná pro mapu.")
     except Exception as e:
         st.warning(f"Nepodařilo se načíst detaily aktivity: {e}")
+
 
 
 
